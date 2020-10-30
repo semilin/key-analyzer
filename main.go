@@ -311,10 +311,10 @@ func altermak() Layout {
 		} else {
 			// reject change
 			stuck++
+			l.swapKeys(y1, x1, y2, x2)
 			if stuck > 1000 {
 				break
 			}
-			l.swapKeys(y1, x1, y2, x2)
 
 		}
 
