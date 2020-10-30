@@ -103,7 +103,7 @@ func init() {
 func main() {
 	args := os.Args
 	if len(args) == 1 {
-		fmt.Printf("Usage...\n\t./keyanalyzer [action] [argument] -{flags}\nActions:\n\tanalyze [layout]\n\timprove [layout]\n\tgenerate {altermak, onehand}\nLayouts:\n\tQwerty\n\tDvorak\n\tColemak\n\tColemak-DH\n\tHalmak\n\tHirou")
+		fmt.Printf("Usage...\n\t./keyanalyzer [action] [argument] -{flags}\nActions:\n\tanalyze [layout]\n\timprove [layout]\n\tgenerate {altermak, onehand}\nLayouts:\n\tQwerty\n\tDvorak\n\tColemak\n\tColemak-DH\n\tHalmak\n\tHirou\n")
 		os.Exit(3)
 	}
 
