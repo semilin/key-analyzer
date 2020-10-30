@@ -246,7 +246,10 @@ func altermak() Layout {
 			// the temperature is
 			if second < first || rand.Intn(100) < temp {
 				// accepts change
-				go fmt.Printf("\r%d same-hand | %d temp", second, temp)
+				fmt.Println(l.Keys[0])
+				fmt.Println(l.Keys[1])
+				fmt.Println(l.Keys[2])
+				go fmt.Printf("\r%d same-hand | %d temp \033[50D\033[3A", second, temp)
 			} else {
 				// rejects change
 				l.swapKeys(y1, x1, y2, x2)
@@ -254,7 +257,7 @@ func altermak() Layout {
 			}
 		}
 	}
-	fmt.Println()
+	fmt.Printf("\033[3B\n\n")
 
 	// EFFORT Stage - try to minimize effort without moving keys
 	// across hands
@@ -272,15 +275,18 @@ func altermak() Layout {
 
 			if second < first || rand.Intn(100) < temp {
 				// accept change
-				go fmt.Printf("\r%d effort/word | %d temp", second/(TextLen/5), temp)
+				fmt.Println(l.Keys[0])
+				fmt.Println(l.Keys[1])
+				fmt.Println(l.Keys[2])
+				go fmt.Printf("\r%d effort/word | %d temp \033[50D\033[3A", second/(TextLen/5), temp)
 			} else {
 				// reject change
 				l.swapKeys(y1, x1, y2, x2)
 
 			}
-
 		}
 	}
+	fmt.Printf("\033[3B\n\n")
 
 	// FINAL Stage - Once the temperature is completely cold, make
 	// greedy improvements until it takes too long to find more
@@ -297,9 +303,13 @@ func altermak() Layout {
 		second := l.calcEffort()
 
 		if second < first {
-			go fmt.Printf("\r%d effort", second)
+			fmt.Println(l.Keys[0])
+			fmt.Println(l.Keys[1])
+			fmt.Println(l.Keys[2])
+			go fmt.Printf("\r%d effort \033[50D\033[3A", second)
 			stuck = 0
 		} else {
+			// reject change
 			stuck++
 			if stuck > 1000 {
 				break
@@ -310,7 +320,7 @@ func altermak() Layout {
 
 	}
 
-	fmt.Println()
+	fmt.Printf("\033[3B\n\n")
 
 	return l
 }
