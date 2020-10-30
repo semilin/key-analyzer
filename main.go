@@ -202,7 +202,7 @@ func (l *Layout) greedyImprove() {
 		second := l.calcEffort()
 
 		if second < first {
-			go fmt.Printf("\r%d strain | %d%% improvement", second, ((original*100 - second*100) / original))
+			fmt.Printf("\r%d strain | %d%% improvement", second, ((original*100 - second*100) / original))
 			stuck = 0
 		} else {
 			stuck++
@@ -249,7 +249,7 @@ func altermak() Layout {
 				fmt.Println(l.Keys[0])
 				fmt.Println(l.Keys[1])
 				fmt.Println(l.Keys[2])
-				go fmt.Printf("\r%d same-hand | %d temp \033[50D\033[3A", second, temp)
+				fmt.Printf("\r%d same-hand | %d temp \033[50D\033[3A", second, temp)
 			} else {
 				// rejects change
 				l.swapKeys(y1, x1, y2, x2)
@@ -278,7 +278,7 @@ func altermak() Layout {
 				fmt.Println(l.Keys[0])
 				fmt.Println(l.Keys[1])
 				fmt.Println(l.Keys[2])
-				go fmt.Printf("\r%d effort/word | %d temp \033[50D\033[3A", second/(TextLen/5), temp)
+				fmt.Printf("\r%d effort/word | %d temp \033[50D\033[3A", second/(TextLen/5), temp)
 			} else {
 				// reject change
 				l.swapKeys(y1, x1, y2, x2)
@@ -306,7 +306,7 @@ func altermak() Layout {
 			fmt.Println(l.Keys[0])
 			fmt.Println(l.Keys[1])
 			fmt.Println(l.Keys[2])
-			go fmt.Printf("\r%d effort \033[50D\033[3A", second)
+			fmt.Printf("\r%d effort \033[50D\033[3A", second)
 			stuck = 0
 		} else {
 			// reject change
