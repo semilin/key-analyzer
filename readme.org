@@ -49,7 +49,7 @@ hand, employing the use of layers to hit the extra keys.
     new version looks like, and I'm not that bothered to update it.
 + [[https:github.com/MadRabbit/halmak][Halmak]]
 ** Flags
-**NONE OF THESE ARE FUNCTIONAL AT THE MOMENT**
+*NONE OF THESE ARE FUNCTIONAL AT THE MOMENT*
 *** SFB Cost
 =-sfb [int]=
 *** Outward Roll Cost
