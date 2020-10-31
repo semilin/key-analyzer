@@ -186,9 +186,9 @@ func (l *Layout) greedyImprove() {
 			y2 = rand.Intn(3)
 		} else if Restrict == "hand" {
 			hand := rand.Intn(2)
-			x1 = rand.Intn(4) + (hand * 5)
+			x1 = rand.Intn(5) + (hand * 5)
 			y2 = rand.Intn(3)
-			x2 = rand.Intn(4) + (hand * 5)
+			x2 = rand.Intn(5) + (hand * 5)
 			y2 = rand.Intn(3)
 		} else if Restrict == "finger" {
 			x1 = rand.Intn(9)
@@ -257,7 +257,7 @@ func altermak() Layout {
 			}
 		}
 	}
-	fmt.Printf("\033[3B\n\n")
+	fmt.Printf("\033[3B\n")
 
 	// EFFORT Stage - try to minimize effort without moving keys
 	// across hands
@@ -286,7 +286,7 @@ func altermak() Layout {
 			}
 		}
 	}
-	fmt.Printf("\033[3B\n\n")
+	fmt.Printf("\033[3B\n")
 
 	// FINAL Stage - Once the temperature is completely cold, make
 	// greedy improvements until it takes too long to find more
@@ -320,7 +320,7 @@ func altermak() Layout {
 
 	}
 
-	fmt.Printf("\033[3B\n\n")
+	fmt.Printf("\033[3B\n")
 
 	return l
 }
@@ -422,11 +422,12 @@ func (l *Layout) calcEffort() int {
 
 		// punish outward rolls, based on what fingers are
 		// used
+		
 		// right hand
 		if finger >= 6 && lastfinger > 6 {
 			if finger > lastfinger {
-				finger1 := (lastfinger - 6)
-				finger2 := (finger - 6)
+				finger1 := (lastfinger - 5)
+				finger2 := (finger - 5)
 				effort += 1 + (finger1+finger2)/2
 			}
 		}
@@ -434,8 +435,8 @@ func (l *Layout) calcEffort() int {
 		// left hand
 		if finger <= 3 && lastfinger < 3 {
 			if finger < lastfinger {
-				finger1 := (3 - lastfinger)
-				finger2 := (3 - finger)
+				finger1 := (4 - lastfinger)
+				finger2 := (4 - finger)
 				effort += 1 + (finger1+finger2)/2
 			}
 		}
