@@ -95,9 +95,9 @@ func init() {
 	flag.IntVar(&OutwardRollCost, "outwardroll", 2, "The cost for an outward roll")
 	Restrict = *flag.String("restrict", "hand", "What changes are allowed {none, hand, finger}")
 
-	Text = strings.ReplaceAll(Text, "google", " ")
-	TextLen = len(Text)
+	LoadText()
 
+	TextLen = len(Text)
 }
 
 func main() {
@@ -187,12 +187,12 @@ func (l *Layout) greedyImprove() {
 		} else if Restrict == "hand" {
 			hand := rand.Intn(2)
 			x1 = rand.Intn(5) + (hand * 5)
-			y2 = rand.Intn(3)
+			y1 = rand.Intn(3)
 			x2 = rand.Intn(5) + (hand * 5)
 			y2 = rand.Intn(3)
 		} else if Restrict == "finger" {
 			x1 = rand.Intn(9)
-			y2 = rand.Intn(3)
+			y1 = rand.Intn(3)
 			x2 = x1
 			y2 = rand.Intn(3)
 		}
