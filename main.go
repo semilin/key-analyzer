@@ -88,6 +88,15 @@ var halmak = Layout{
 	"Halmak",
 }
 
+// altermak trained on Pride and Prejudice
+var austenmak = Layout{
+	[3][]string{
+		{"/", "y", "u", ".", "q", "b", "l", "d", "c", "z"},
+		{"g", "i", "e", "a", ",", "m", "h", "t", "s", "r"},
+		{"p", "j", ";", "o", "x", "f", "n", "v", "w", "k"}},
+	"Austenmak",
+}
+
 func init() {
 	flag.IntVar(&SFBcost, "sfb", 7, "The cost for same finger bigrams")
 	flag.IntVar(&LayerChangeCost, "layerchange", 4, "The cost for changing layers in one hand layout")
@@ -116,6 +125,7 @@ func main() {
 			fmt.Println(l.Keys[0])
 			fmt.Println(l.Keys[1])
 			fmt.Println(l.Keys[2])
+			l.deepAnalyze()
 		case "onehand":
 			l := onehand()
 			fmt.Println(l.Layer1[0])
@@ -132,9 +142,10 @@ func main() {
 		fmt.Println(l.Keys[0])
 		fmt.Println(l.Keys[1])
 		fmt.Println(l.Keys[2])
+		l.deepAnalyze()
 	} else if args[1] == "analyze" {
 		l := strToLayout(args[2])
-		l.printAnalysis()
+		l.deepAnalyze()
 		fmt.Println(l.Keys[0])
 		fmt.Println(l.Keys[1])
 		fmt.Println(l.Keys[2])
@@ -155,12 +166,132 @@ func strToLayout(s string) Layout {
 		return halmak
 	case "hirou":
 		return hirou
+	case "austenmak":
+		return austenmak
 	}
 	return qwerty
 }
 
 func (l *Layout) analyze() (int, int) {
 	return l.calcEffort(), l.calcAlternation()
+}
+
+type bigram struct {
+	Letters string
+	Count int
+}
+
+func (l *Layout) deepAnalyze() {
+	var sfbs []bigram
+
+	topRow := strings.Join(l.Keys[0], "")
+	homeRow := strings.Join(l.Keys[1], "")
+	botRow := strings.Join(l.Keys[2], "")
+	
+	var lastChar string
+	lastChar = " "
+
+	var lastFinger int
+	var finger int
+
+	var row int
+
+	var fingerUsage []int
+	fingerUsage = []int{0,0,0,0,0,0,0,0,0,0}
+	
+	var rowUsage []int
+	rowUsage = []int{0,0,0}
+
+	realLen := TextLen
+	
+	for _, char := range strings.Split(Text, "") {
+		if char == " " {
+			lastChar = " "
+			realLen--
+			continue
+		}
+
+		if strings.Contains(topRow, char) {
+			finger = rowFinger(l.Keys[0], char)
+			row = 0
+		} else if strings.Contains(homeRow, char) {
+			finger = rowFinger(l.Keys[1], char)
+			row = 1 
+		} else if strings.Contains(botRow, char) {
+			finger = rowFinger(l.Keys[2], char)
+			row = 2
+		} else {
+			lastChar = " "
+			realLen--
+			continue
+		}
+
+		if finger == 4 {
+			finger = 3
+		} else if finger == 5 {
+			finger = 6
+		}
+
+		fingerUsage[finger]++
+		rowUsage[row]++
+
+		if finger == lastFinger && lastChar != " " && lastChar != char {
+			added := false
+			for i, s := range sfbs {
+				if s.Letters == (lastChar + char) {
+					sfbs[i].Count++
+					for {
+						swapped := false
+						if i > 0 {
+							if sfbs[i-1].Count < sfbs[i].Count {
+								temp := sfbs[i]
+								sfbs[i] = sfbs[i-1]
+								sfbs[i-1] = temp
+								i--
+								swapped = true
+							}
+						}
+						if !swapped {
+							break
+						} 
+						added = true
+					}
+					break
+				}
+			}
+			
+			if !added {
+				sfbs = append(sfbs, bigram{Count: 1, Letters: (lastChar + char)})
+			}
+		}
+
+		lastFinger = finger
+		lastChar = char
+
+	}
+
+	fmt.Println("Row Usage")
+	fmt.Printf("Top:  %f%%\n", (float64(rowUsage[0]) / float64(realLen))*100)
+	fmt.Printf("Home: %f%%\n", (float64(rowUsage[1]) / float64(realLen))*100)
+	fmt.Printf("Bot:  %f%%\n", (float64(rowUsage[2]) / float64(realLen))*100)
+	fmt.Println("SFBs")
+	fmt.Printf("%s %d\n", sfbs[0].Letters, sfbs[0].Count)
+	fmt.Printf("%s %d\n", sfbs[1].Letters, sfbs[1].Count)
+	fmt.Printf("%s %d\n", sfbs[2].Letters, sfbs[2].Count)
+	fmt.Printf("%s %d\n", sfbs[3].Letters, sfbs[3].Count)
+	fmt.Printf("%s %d\n", sfbs[4].Letters, sfbs[4].Count)
+}
+
+func rowFinger(row []string, char string) int {
+	for i, k := range row {
+		if k == char {
+			return i
+		} else {
+			continue
+		}
+	}
+	
+	return 0 
 }
 
 func (l *Layout) printAnalysis() {
@@ -428,7 +559,7 @@ func (l *Layout) calcEffort() int {
 			if finger > lastfinger {
 				finger1 := (lastfinger - 5)
 				finger2 := (finger - 5)
-				effort += 1 + (finger1+finger2)/2
+				effort += 2 + (finger1+finger2)/2
 			}
 		}
 
@@ -437,7 +568,7 @@ func (l *Layout) calcEffort() int {
 			if finger < lastfinger {
 				finger1 := (4 - lastfinger)
 				finger2 := (4 - finger)
-				effort += 1 + (finger1+finger2)/2
+				effort += 2 + (finger1+finger2)/2
 			}
 		}
 
