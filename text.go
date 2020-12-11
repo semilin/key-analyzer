@@ -1,21 +1,36 @@
 package main
 
 import (
-	"strings"
-	"io/ioutil"
 	"fmt"
+	"io/ioutil"
+	"os"
+	"strings"
 )
 
-var Text string
-var TextLen int 
-
-func LoadText() {
-	data, err := ioutil.ReadFile("./text.txt")
-	Text = string(data)
-	Text = strings.TrimSpace(Text)
-	Text = strings.ToLower(Text)
+// LoadTexts() reads from the ./texts directory and loads all text
+// files into the Texts variable.
+func LoadTexts() {
+	directory, err := os.Open("./texts")
 	if err != nil {
-		fmt.Println("Error reading file:", err)
+		panic("No texts directory was found. Please create one and add at least one sample text file.")
 	}
-}
+	defer directory.Close()
 
+	files, _ := directory.Readdirnames(0)
+	for _, f := range files {
+		text, err := os.Open("./texts/" + f)
+		if err != nil {
+			fmt.Printf("text.go | An error occurred when opening file %s: %s", f, err)
+			continue
+		}
+		content, err := ioutil.ReadAll(text)
+		if err != nil {
+			//fmt.Printf("text.go | An error occurred when reading file %s: %s", f, err)
+			continue
+		}
+
+		Texts = append(Texts, string(content))
+	}
+	FullText = strings.Join(Texts, "  ")
+	TextLength = float64(len(strings.ReplaceAll(FullText, " ", "")))
+}

@@ -1,0 +1,42 @@
+#layout {
+    margin-left: 100px;
+    color: white;
+}
+
+label {
+    margin-left: 75px;
+    color: white;
+}
+
+#keys {
+    margin-left: 50px;
+    font-family: "Lucida Console", monospace;
+}
+
+#start_generation_button {
+    margin-left: 50px;
+}
+
+#temp {
+    margin-left: 50px;
+}
+
+#score {
+    margin-left: 50px;
+}
+
+#stats {
+    margin-left: 75px;
+}
+
+.statistic {
+    margin-left: 15px;
+}
+
+.datum {
+    margin-left: 25px;
+}
+
+body {
+    background-color: #202020
+}
