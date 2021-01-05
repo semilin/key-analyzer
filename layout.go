@@ -20,6 +20,7 @@ type Stats struct {
 	TextLength         int
 	PinkyDistance      int
 	OutwardRolls       int
+	Redirections       int
 	HeatMap            [3][]int
 	Score              float64
 }

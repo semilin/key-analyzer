@@ -11,8 +11,10 @@
     <option value="colemak">Colemak</option>
     <option value="colemak_dh">Colemak DH</option>
     <option value="workman">Workman</option>
+    <option value="norman">Norman</option>
     <option value="halmak">Halmak</option>
     <option value="beakl">BEAKL 15</option>
+    <option value="tnwmlc">TNWMLC</option>
     <option value="optimal">Optimal</option>
   </select>
   <div id="layout">
@@ -34,8 +36,10 @@
     <div id="stats">
       <h2>Stats</h2>
       <div class="statistic">
-	<h3>Alternation</h3>
-	<h4 class="datum" id="alternation">0</h4>
+	<h3>Hand Balance</h3>
+	<h4 class="datum" id="alternation">Alternation: 0%</h4>
+	<h4 class="datum" id="redirections">Redirections: 0%</h4>
+	<h4 class="datum" id="balance">Balance: 0%</h4>
       </div>
       <div class="statistic">
 	<h3>SFB Percentage</h3>
@@ -87,7 +91,10 @@
   }
 
   function loadStats() {
-      document.getElementById("alternation").innerHTML = Math.round(100 * stats.AlternationAmount / stats.TextLength) + "%%";
+      document.getElementById("alternation").innerHTML = "Alternation: " + Math.round(100 * stats.AlternationAmount / stats.TextLength) + "%%";
+      document.getElementById("redirections").innerHTML = "Redirections: " + Math.round(100 * stats.Redirections / stats.TextLength) + "%%";
+      
+      document.getElementById("balance").innerHTML = "Redirections: " + Math.round(100 * stats.Redirections / stats.TextLength) + "%%";
       document.getElementById("sfb_percent").innerHTML = (100 * stats.SFBamount / stats.TextLength).toFixed(1) + "%%";
       document.getElementById("top_row").innerHTML = "Top: " + Math.round(100 * stats.RowDistribution[0] / stats.TextLength) + "%%";
       document.getElementById("home_row").innerHTML = "Home: " + Math.round(100 * stats.RowDistribution[1] / stats.TextLength) + "%%";

@@ -45,7 +45,25 @@ var Workman = Layout{
 	"Workman",
 }
 
+var Norman = Layout{
+	[3][]string{
+		{"q", "w", "d", "f", "k", "j", "u", "r", "l", ";"},
+		{"a", "s", "e", "t", "g", "y", "n", "i", "o", "h"},
+		{"z", "x", "c", "v", "b", "p", "m", ",", ".", "/"},
+	},
+	"Workman",
+}
+
 var Halmak = Layout{
+	[3][]string{
+		{"w", "l", "r", "b", "z", ";", "q", "u", "d", "j"},
+		{"s", "h", "n", "t", ",", ".", "a", "e", "o", "i"},
+		{"f", "m", "v", "c", "/", "g", "p", "x", "k", "y"},
+	},
+	"Halmak",
+}
+
+var Henkaku = Layout{
 	[3][]string{
 		{"w", "l", "r", "b", "z", ";", "q", "u", "d", "j"},
 		{"s", "h", "n", "t", ",", ".", "a", "e", "o", "i"},
@@ -60,7 +78,16 @@ var BEAKL15 = Layout{
 		{"h", "i", "e", "a", "u", "d", "s", "t", "r", "p"},
 		{"q", "'", ";", "x", "x", "w", "f", "l", "b", "v"},
 	},
-	"Halmak",
+	"BEAKL 15",
+}
+
+var TNWMLC = Layout{
+	[3][]string{
+		{"t", "n", "w", "m", "l", "c", "b", "p", "r", "h"},
+		{"s", "g", "x", "j", "f", "k", "q", "z", "v", ";"},
+		{"e", "a", "d", "i", "o", "y", "u", ",", ".", "/"},
+	},
+	"TNWMLC",
 }
 
 var Optimal = Layout {
@@ -84,10 +111,14 @@ func strToLayout(s string) (Layout) {
 		return Dvorak
 	case "workman":
 		return Workman
+	case "tnwmlc":
+		return TNWMLC
 	case "halmak":
 		return Halmak
 	case "beakl":
 		return BEAKL15
+	case "norman":
+		return Norman
 	case "optimal":
 		return Optimal
 	default:

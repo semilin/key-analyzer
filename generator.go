@@ -1,22 +1,17 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"math/rand"
 )
 
 func score(stats Stats) float64 {
 	var score float64
-	score += 150 * (100 * float64(stats.SFBamount) / TextLength)
-	alternationpercent := (100 * float64(stats.AlternationAmount) / TextLength)
-	if alternationpercent < 45 {
-		score += 2 * (100 - alternationpercent)
-	}
-	score += 50 * (100 * float64(stats.FingerDistance) / TextLength)
-	idealfingers := [4]float64{8, 12, 15, 15}
+	score += 100 * (100 * float64(stats.SFBamount) / TextLength)
+	score += 15 * (100 * float64(stats.FingerDistance) / TextLength)
+	idealfingers := [4]float64{9, 13, 14, 14}
 	//fingerlengths := [4]int{3, 6, 8, 3}
-	score += (100 * float64(stats.OutwardRolls) / TextLength)
+	score += 2 * (100 * float64(stats.Redirections) / TextLength)
 
 	var usageoff float64
 
@@ -30,11 +25,9 @@ func score(stats Stats) float64 {
 	usageoff += math.Abs(idealfingers[2] - (100 * float64(stats.FingerDistribution[5]) / TextLength))
 	usageoff += math.Abs(idealfingers[3] - (100 * float64(stats.FingerDistribution[4]) / TextLength))
 
-	fmt.Println(100 * float64(stats.OutwardRolls) / TextLength)
+	score += usageoff
 
-	score += 10 * usageoff
-
-	score += 100 * (100 * float64(stats.PinkyDistance) / TextLength)
+	score += 20 * (100 * float64(stats.PinkyDistance) / TextLength)
 
 	return score
 }
@@ -57,10 +50,10 @@ func generateOptimal() {
 			x2 := rand.Intn(10)
 			y1 := rand.Intn(3)
 			y2 := rand.Intn(3)
-			first := score(Optimal.Stats())
+			first := score(Optimal.DataStats())
 			Optimal.swapKeys(x1, y1, x2, y2)
-			second := score(Optimal.Stats())
-			if second > first {
+			second := score(Optimal.DataStats())
+			if second < first {
 				// accept
 				continue
 							
