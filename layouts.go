@@ -63,10 +63,10 @@ var Halmak = Layout{
 	"Halmak",
 }
 
-var Henkaku = Layout{
+var Corruption = Layout{
 	[3][]string{
 		{"w", "l", "r", "b", "z", ";", "q", "u", "d", "j"},
-		{"s", "h", "n", "t", ",", ".", "a", "e", "o", "i"},
+		{"a", "r", "s", "t", ",", ".", "n", "e", "i", "o"},
 		{"f", "m", "v", "c", "/", "g", "p", "x", "k", "y"},
 	},
 	"Halmak",
@@ -79,6 +79,15 @@ var BEAKL15 = Layout{
 		{"q", "'", ";", "x", "x", "w", "f", "l", "b", "v"},
 	},
 	"BEAKL 15",
+}
+
+var ISRT = Layout{
+	[3][]string{
+		{"y", "c", "l", "m", "k", "z", "f", "u", ",", "'"},
+		{"i", "s", "r", "t", "g", "p", "n", "e", "a", "o"},
+		{"q", "v", "w", "d", "j", "b", "h", "/", ".", "x"},
+	},
+	"ISRT",
 }
 
 var TNWMLC = Layout{
@@ -117,6 +126,8 @@ func strToLayout(s string) (Layout) {
 		return Halmak
 	case "beakl":
 		return BEAKL15
+	case "isrt":
+		return ISRT
 	case "norman":
 		return Norman
 	case "optimal":

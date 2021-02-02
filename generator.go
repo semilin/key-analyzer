@@ -7,12 +7,17 @@ import (
 
 func score(stats Stats) float64 {
 	var score float64
-	score += 100 * (100 * float64(stats.SFBamount) / TextLength)
-	score += 15 * (100 * float64(stats.FingerDistance) / TextLength)
-	idealfingers := [4]float64{9, 13, 14, 14}
+	score += 20 * (100 * float64(stats.SFBamount) / TextLength)
+	fingerspeed := 1000 * stats.TrueDistance / stats.Time
+	println(fingerspeed)
+	score += float64(fingerspeed)
+	//score += 0.4 * (100 * float64(stats.FingerDistance) / TextLength * 5)
+	
 	//fingerlengths := [4]int{3, 6, 8, 3}
-	score += 2 * (100 * float64(stats.Redirections) / TextLength)
+	score += 4 * (100 * float64(stats.Redirections) / TextLength)
 
+	
+	idealfingers := [4]float64{11, 13, 13, 13}
 	var usageoff float64
 
 	usageoff += math.Abs(idealfingers[0] - (100 * float64(stats.FingerDistribution[0]) / TextLength))
@@ -25,9 +30,9 @@ func score(stats Stats) float64 {
 	usageoff += math.Abs(idealfingers[2] - (100 * float64(stats.FingerDistribution[5]) / TextLength))
 	usageoff += math.Abs(idealfingers[3] - (100 * float64(stats.FingerDistribution[4]) / TextLength))
 
-	score += usageoff
-
-	score += 20 * (100 * float64(stats.PinkyDistance) / TextLength)
+	score += 0.5 * usageoff
+	
+	//score += 20 * (100 * float64(stats.PinkyDistance) / TextLength)
 
 	return score
 }
@@ -36,7 +41,7 @@ func generateOptimal() {
 	Optimal = Layout{
 		[3][]string{
 			{"q", "w", "e", "r", "t", "y", "u", "i", "o", "p"},
-			{"a", "s", "d", "f", "g", "h", "j", "k", "l", ";"},
+			{"a", "s", "d", "f", "g", "h", "j", "k", "l", "'"},
 			{"z", "x", "c", "v", "b", "n", "m", ",", ".", "/"},
 		},
 		"Qwerty",
@@ -65,7 +70,7 @@ func generateOptimal() {
 					Optimal.swapKeys(x1, y1, x2, y2)
 				}
 				
-			}
+			} 
 		}
 		
 	}

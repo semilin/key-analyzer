@@ -1,12 +1,18 @@
 package main
 
 import (
+	"math"
 	"strings"
 )
 
 type Word struct {
 	Word string
 	Count int
+}
+
+type Pos struct {
+	Row int
+	Col int
 }
 
 func TextData() []Word {
@@ -17,7 +23,9 @@ func TextData() []Word {
 				continue
 			}
 			added := false
+			w = strings.ToLower(w)
 			for j, word := range words {
+				
 				if word.Word == w {
 					added = true
 					words[j].Count++
@@ -56,16 +64,21 @@ func (l *Layout) DataStats() Stats {
 		var alternation int
 		var sfbCount int
 		var distance int
+		var truedistance float64
+		var time float64
 		var pinkydistance int
 		var redirections int
 		fingerdistribution := [8]int{0, 0, 0, 0, 0, 0, 0, 0}
 		rowdistribution := []int{0, 0, 0}
 
+		var lastkeys []Pos
+		
 		lastfinger := NoFinger
 		lasthand := NoHand
 		lastlasthand := NoHand
 		lastrow := NoRow
 		lastdirection := NoDirection
+		lastchar := ""
 		for _, char := range strings.Split(word.Word, "") {
 			col, row, err := l.PositionForKey(char)
 			var hand int
@@ -75,8 +88,10 @@ func (l *Layout) DataStats() Stats {
 				lastfinger = NoFinger
 				lastdirection = NoDirection
 				lastrow = NoRow
+				lastchar = ""
 				continue
 			}
+			
 			switch {
 			case col <= 3:
 				finger = col+1
@@ -90,6 +105,32 @@ func (l *Layout) DataStats() Stats {
 				distance++
 			}
 
+			
+			for t:=len(lastkeys)-1;t>0;t-- {
+				pos := lastkeys[t]
+				var oldfinger int
+				
+				if pos.Col <= 3 {
+					oldfinger = pos.Col + 1
+				} else if pos.Col >= 6 {
+					oldfinger = pos.Col - 1
+				} else {
+					oldfinger = pos.Col
+				}
+
+				if oldfinger == finger {
+					if len(lastkeys)-1 == t {
+						time += 0.5
+					} else {
+						time += float64(len(lastkeys) - 1 - t)
+					}
+					
+				
+					truedistance += math.Abs(float64(pos.Col - col)) + math.Abs(float64(pos.Row - row))
+					break
+				}
+			}
+			
 			if row != 1 {
 				distance++
 				if finger == 1 || finger == 8 {
@@ -131,7 +172,7 @@ func (l *Layout) DataStats() Stats {
 				}
 			}
 
-			if finger == lastfinger && lastfinger != NoFinger {
+			if finger == lastfinger && lastchar != char && lastfinger != NoFinger {
 				sfbCount++
 			}
 
@@ -142,13 +183,17 @@ func (l *Layout) DataStats() Stats {
 			lastfinger = finger
 			lastrow = row
 			lastdirection = direction
+			lastchar = char
+			lastkeys = append(lastkeys, Pos{row, col})
 		}
 		stats.AlternationAmount += alternation * word.Count 
 		stats.SFBamount += sfbCount * word.Count 
 		stats.FingerDistance += distance * word.Count 
 		stats.PinkyDistance += pinkydistance * word.Count
-		stats.TextLength += len(word.Word) * word.Count
+		stats.TextLength += (len(word.Word)) * word.Count
 		stats.Redirections += redirections * word.Count
+		stats.TrueDistance += truedistance * float64(word.Count)
+		stats.Time += time * float64(word.Count)
 		for i, v := range rowdistribution {
 			stats.RowDistribution[i] += v * word.Count
 		}
@@ -158,8 +203,6 @@ func (l *Layout) DataStats() Stats {
 	}
 
 	stats.Layout = l.Keys
-	println(stats.Redirections)
-	println(stats.TextLength)
 	return stats
 }
 

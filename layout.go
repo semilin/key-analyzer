@@ -17,6 +17,8 @@ type Stats struct {
 	SFBamount          int
 	AlternationAmount  int
 	FingerDistance     int
+	TrueDistance       float64
+	Time               float64
 	TextLength         int
 	PinkyDistance      int
 	OutwardRolls       int

@@ -3,20 +3,20 @@
 </head>
 
 <body>
-  <label for="layouts">Choose a layout</label>
-
-  <select name="layouts" id="layouts" onchange="getLayoutStats()">
-    <option value="qwerty">Qwerty</option>
-    <option value="dvorak">Dvorak</option>
-    <option value="colemak">Colemak</option>
-    <option value="colemak_dh">Colemak DH</option>
-    <option value="workman">Workman</option>
-    <option value="norman">Norman</option>
-    <option value="halmak">Halmak</option>
-    <option value="beakl">BEAKL 15</option>
-    <option value="tnwmlc">TNWMLC</option>
-    <option value="optimal">Optimal</option>
-  </select>
+  <div class="dropdown">
+      <button class="dropbtn" id="layout_picker">Choose Layout</button>
+      <div class="dropdown-content">
+	  <a href="javascript:setLayout('qwerty')">Qwerty</a>
+	  <a href="javascript:setLayout('dvorak')">Dvorak</a>
+	  <a href="javascript:setLayout('colemak')">Colemak</a>
+	  <a href="javascript:setLayout('colemak_dh')">Colemak DH</a>
+	  <a href="javascript:setLayout('workman')">Workman</a>
+	  <a href="javascript:setLayout('halmak')">Halmak</a>
+	  <a href="javascript:setLayout('isrt')">ISRT</a>
+	  <a href="javascript:setLayout('optimal')">Optimal</a>
+      </div>
+  </div>
+  
   <div id="layout">
     <h1 id="layout_name">qwerty</h1>
     <div id="keys">
@@ -39,7 +39,8 @@
 	<h3>Hand Balance</h3>
 	<h4 class="datum" id="alternation">Alternation: 0%</h4>
 	<h4 class="datum" id="redirections">Redirections: 0%</h4>
-	<h4 class="datum" id="balance">Balance: 0%</h4>
+	<div class="datum" id="fingers">Fingers</h4>
+	<div class="statistic"></div>
       </div>
       <div class="statistic">
 	<h3>SFB Percentage</h3>
@@ -57,6 +58,7 @@
 	  <h3>Distance</h3>
 	  <h4 class="datum" id="distance_total">Total: 0</h4>
 	  <h4 class="datum" id="distance_pinky">Pinkies: 0</h4>
+	  <h4 class="datum" id="finger_speed">Finger Speed: 0</h4>
 		  
       </div>
     </div>
@@ -78,7 +80,7 @@
 	      loadStats()
 	  }
       };
-      currentLayout = document.getElementById("layouts").value
+      currentLayout = document.getElementById("layout_name").innerHTML;
       request.open("GET", currentLayout, true)
       request.send();
   }
@@ -90,11 +92,15 @@
       request.send()
   }
 
+  function setLayout(layout) {
+      console.log(document.getElementById("layout_name".value))
+      document.getElementById("layout_name").innerHTML = layout
+      getLayoutStats()
+  }
+
   function loadStats() {
       document.getElementById("alternation").innerHTML = "Alternation: " + Math.round(100 * stats.AlternationAmount / stats.TextLength) + "%%";
       document.getElementById("redirections").innerHTML = "Redirections: " + Math.round(100 * stats.Redirections / stats.TextLength) + "%%";
-      
-      document.getElementById("balance").innerHTML = "Redirections: " + Math.round(100 * stats.Redirections / stats.TextLength) + "%%";
       document.getElementById("sfb_percent").innerHTML = (100 * stats.SFBamount / stats.TextLength).toFixed(1) + "%%";
       document.getElementById("top_row").innerHTML = "Top: " + Math.round(100 * stats.RowDistribution[0] / stats.TextLength) + "%%";
       document.getElementById("home_row").innerHTML = "Home: " + Math.round(100 * stats.RowDistribution[1] / stats.TextLength) + "%%";
@@ -102,10 +108,11 @@
       document.getElementById("distance_total").innerHTML = "Total: " + (stats.FingerDistance / stats.TextLength * 5).toFixed(2) + " keys per word";
       document.getElementById("distance_pinky").innerHTML = "Pinky: " + (100 * stats.PinkyDistance / stats.FingerDistance).toFixed(2) + "%% of total";
 
+      document.getElementById("finger_speed").innerHTML = "Finger Speed: " + (stats.TrueDistance / stats.Time).toFixed(4)
+
 
       document.getElementById("score").innerHTML = "Score: " + Math.round(stats.Score)
 
-      document.getElementById("layout_name").innerHTML = currentLayout;
       var keys = stats.Layout;
       console.log(keys);
       document.getElementById("keys").innerHTML = keys[0].join(" ") + "<br>" + keys[1].join(" ") + "<br>" + keys[2].join(" ");
@@ -117,7 +124,7 @@
 	      if (this.readyState == 4 && this.status == 200) {
 		  temp = this.responseText;
 		  document.getElementById("temp").innerHTML = "Temperature: " + temp
-		  setTimeout(getLayoutStats, 1000)
+		  setTimeout(getLayoutStats, 500)
 	      }
 	  };
 	  request.open("GET", "temp", true)
