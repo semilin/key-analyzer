@@ -60,6 +60,13 @@ func (l *Layout) DataStats() Stats {
 	var stats Stats
 	stats.FingerDistribution = [8]int{0, 0, 0, 0, 0, 0, 0, 0}
 	stats.RowDistribution = []int{0, 0, 0}
+
+	stats.HeatMap = [3][]int{
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+	}
+	
 	for _, word := range Data {
 		var alternation int
 		var sfbCount int
@@ -68,6 +75,11 @@ func (l *Layout) DataStats() Stats {
 		var time float64
 		var pinkydistance int
 		var redirections int
+		heatmap := [][]int{
+			{0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0},
+		}
 		fingerdistribution := [8]int{0, 0, 0, 0, 0, 0, 0, 0}
 		rowdistribution := []int{0, 0, 0}
 
@@ -91,6 +103,8 @@ func (l *Layout) DataStats() Stats {
 				lastchar = ""
 				continue
 			}
+
+			heatmap[row][col] += 1
 			
 			switch {
 			case col <= 3:
@@ -122,7 +136,12 @@ func (l *Layout) DataStats() Stats {
 					if len(lastkeys)-1 == t {
 						time += 0.5
 					} else {
-						time += float64(len(lastkeys) - 1 - t)
+						timedist := len(lastkeys) - 1 - t
+						if timedist <= 3 {
+							time += float64(timedist)
+						} else {
+							time += 3
+						}
 					}
 					
 				
@@ -194,6 +213,14 @@ func (l *Layout) DataStats() Stats {
 		stats.Redirections += redirections * word.Count
 		stats.TrueDistance += truedistance * float64(word.Count)
 		stats.Time += time * float64(word.Count)
+
+		// add heatmap adjusted for word frequency
+		for y, row := range heatmap {
+			for x, key := range row {
+				stats.HeatMap[y][x] += key * word.Count
+			}
+		}
+		
 		for i, v := range rowdistribution {
 			stats.RowDistribution[i] += v * word.Count
 		}

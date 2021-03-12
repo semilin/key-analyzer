@@ -1,137 +1,138 @@
 <head>
-  <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-  <div class="dropdown">
-      <button class="dropbtn" id="layout_picker">Choose Layout</button>
-      <div class="dropdown-content">
-	  <a href="javascript:setLayout('qwerty')">Qwerty</a>
-	  <a href="javascript:setLayout('dvorak')">Dvorak</a>
-	  <a href="javascript:setLayout('colemak')">Colemak</a>
-	  <a href="javascript:setLayout('colemak_dh')">Colemak DH</a>
-	  <a href="javascript:setLayout('workman')">Workman</a>
-	  <a href="javascript:setLayout('halmak')">Halmak</a>
-	  <a href="javascript:setLayout('isrt')">ISRT</a>
-	  <a href="javascript:setLayout('optimal')">Optimal</a>
-      </div>
-  </div>
-  
-  <div id="layout">
-    <h1 id="layout_name">qwerty</h1>
-    <div id="keys">
-      <p>
-	q w e r t y u i o p <br>
-	a s d f g h j k l ; <br>
-	z x c v b n m , . /</p>
+    <div class="dropdown">
+	<button class="dropbtn" id="layout_picker">Choose Layout</button>
+	<div class="dropdown-content">
+	    <a href="javascript:setLayout('qwerty')">Qwerty</a>
+	    <a href="javascript:setLayout('dvorak')">Dvorak</a>
+	    <a href="javascript:setLayout('colemak')">Colemak</a>
+	    <a href="javascript:setLayout('colemak_dh')">Colemak DH</a>
+	    <a href="javascript:setLayout('workman')">Workman</a>
+	    <a href="javascript:setLayout('norman')">Norman</a>
+	    <a href="javascript:setLayout('halmak')">Halmak</a>
+	    <a href="javascript:setLayout('isrt')">ISRT</a>
+	    <a href="javascript:setLayout('optimal')">Optimal</a>
+	</div>
     </div>
-    <br>
-    <button type="button" id="start_generation_button" style="display:none;" onclick="start_generation()">Start Generation</button>
-    <div id="temp" style="display:none;">
-      
-    </div>
-    <div id="score">
-	
-    </div>
-    <div id="stats">
-      <h2>Stats</h2>
-      <div class="statistic">
-	<h3>Hand Balance</h3>
-	<h4 class="datum" id="alternation">Alternation: 0%</h4>
-	<h4 class="datum" id="redirections">Redirections: 0%</h4>
-	<div class="datum" id="fingers">Fingers</h4>
-	<div class="statistic"></div>
-      </div>
-      <div class="statistic">
-	<h3>SFB Percentage</h3>
-	<h4 class="datum" id="sfb_percent">0</h4>
-      </div>
-      <div class="statistic">
-	<h3>Row Distribution</h3>
-	<ul>
-	  <li id="top_row">Top: </li>
-	  <li id="home_row">Home: </li>
-	  <li id="bot_row">Bot: </li>
-	</ul>
-      </div>
-      <div class="statistic">
-	  <h3>Distance</h3>
-	  <h4 class="datum" id="distance_total">Total: 0</h4>
-	  <h4 class="datum" id="distance_pinky">Pinkies: 0</h4>
-	  <h4 class="datum" id="finger_speed">Finger Speed: 0</h4>
-		  
-      </div>
-    </div>
-  </div>
+    
+    <div id="layout">
+	<h1 id="layout_name">qwerty</h1>
+	<div id="keys">
+	    <p>
+		q w e r t y u i o p <br>
+		a s d f g h j k l ; <br>
+		z x c v b n m , . /</p>
+	</div>
+	<br>
+	<button type="button" id="start_generation_button" style="display:none;" onclick="start_generation()">Start Generation</button>
+	<div id="temp" style="display:none;">
+	    
+	</div>
+	<div id="score">
+	    
+	</div>
+	<div id="stats">
+	    <h2>Stats</h2>
+	    <div class="statistic">
+		<h3>Hand Balance</h3>
+		<h4 class="datum" id="alternation">Alternation: 0%</h4>
+		<h4 class="datum" id="redirections">Redirections: 0%</h4>
+		<div class="datum" id="fingers">Fingers</h4>
+		    <div class="statistic"></div>
+		</div>
+		<div class="statistic">
+		    <h3>SFB Percentage</h3>
+		    <h4 class="datum" id="sfb_percent">0</h4>
+		</div>
+		<div class="statistic">
+		    <h3>Row Distribution</h3>
+		    <ul>
+			<li id="top_row">Top: </li>
+			<li id="home_row">Home: </li>
+			<li id="bot_row">Bot: </li>
+		    </ul>
+		</div>
+		<div class="statistic">
+		    <h3>Distance</h3>
+		    <h4 class="datum" id="distance_total">Total: 0</h4>
+		    <h4 class="datum" id="distance_pinky">Pinkies: 0</h4>
+		    <h4 class="datum" id="finger_speed">Finger Speed: 0</h4>
+		    
+		</div>
+	    </div>
+	</div>
 </body>
 
 <script>
-  var stats
-  var currentLayout = "qwerty"
+ var stats
+ var currentLayout = "qwerty"
 
-  getLayoutStats()
-  
-  function getLayoutStats() {
-      document.getElementById("layouts")
-      var request = new XMLHttpRequest();
-      request.onreadystatechange = function() {
-	  if (this.readyState == 4 && this.status == 200) {
-	      stats = JSON.parse(request.responseText);
-	      loadStats()
-	  }
-      };
-      currentLayout = document.getElementById("layout_name").innerHTML;
-      request.open("GET", currentLayout, true)
-      request.send();
-  }
-  
-  function start_generation() {
-      var request = new XMLHttpRequest();
-      console.log("Starting generation")
-      request.open("PUT", "start_generation")
-      request.send()
-  }
+ getLayoutStats()
+ 
+ function getLayoutStats() {
+     document.getElementById("layouts")
+     var request = new XMLHttpRequest();
+     request.onreadystatechange = function() {
+	 if (this.readyState == 4 && this.status == 200) {
+	     stats = JSON.parse(request.responseText);
+	     loadStats()
+	 }
+     };
+     currentLayout = document.getElementById("layout_name").innerHTML;
+     request.open("GET", currentLayout, true)
+     request.send();
+ }
+ 
+ function start_generation() {
+     var request = new XMLHttpRequest();
+     console.log("Starting generation")
+     request.open("PUT", "start_generation")
+     request.send()
+ }
 
-  function setLayout(layout) {
-      console.log(document.getElementById("layout_name".value))
-      document.getElementById("layout_name").innerHTML = layout
-      getLayoutStats()
-  }
+ function setLayout(layout) {
+     console.log(document.getElementById("layout_name".value))
+     document.getElementById("layout_name").innerHTML = layout
+     getLayoutStats()
+ }
 
-  function loadStats() {
-      document.getElementById("alternation").innerHTML = "Alternation: " + Math.round(100 * stats.AlternationAmount / stats.TextLength) + "%%";
-      document.getElementById("redirections").innerHTML = "Redirections: " + Math.round(100 * stats.Redirections / stats.TextLength) + "%%";
-      document.getElementById("sfb_percent").innerHTML = (100 * stats.SFBamount / stats.TextLength).toFixed(1) + "%%";
-      document.getElementById("top_row").innerHTML = "Top: " + Math.round(100 * stats.RowDistribution[0] / stats.TextLength) + "%%";
-      document.getElementById("home_row").innerHTML = "Home: " + Math.round(100 * stats.RowDistribution[1] / stats.TextLength) + "%%";
-      document.getElementById("bot_row").innerHTML = "Bot: " + Math.round(100 * stats.RowDistribution[2] / stats.TextLength) + "%%";
-      document.getElementById("distance_total").innerHTML = "Total: " + (stats.FingerDistance / stats.TextLength * 5).toFixed(2) + " keys per word";
-      document.getElementById("distance_pinky").innerHTML = "Pinky: " + (100 * stats.PinkyDistance / stats.FingerDistance).toFixed(2) + "%% of total";
+ function loadStats() {
+     document.getElementById("alternation").innerHTML = "Alternation: " + Math.round(100 * stats.AlternationAmount / stats.TextLength) + "%%";
+     document.getElementById("redirections").innerHTML = "Redirections: " + Math.round(100 * stats.Redirections / stats.TextLength) + "%%";
+     document.getElementById("sfb_percent").innerHTML = (100 * stats.SFBamount / stats.TextLength).toFixed(1) + "%%";
+     document.getElementById("top_row").innerHTML = "Top: " + Math.round(100 * stats.RowDistribution[0] / stats.TextLength) + "%%";
+     document.getElementById("home_row").innerHTML = "Home: " + Math.round(100 * stats.RowDistribution[1] / stats.TextLength) + "%%";
+     document.getElementById("bot_row").innerHTML = "Bot: " + Math.round(100 * stats.RowDistribution[2] / stats.TextLength) + "%%";
+     document.getElementById("distance_total").innerHTML = "Total: " + (stats.FingerDistance / stats.TextLength * 5).toFixed(2) + " keys per word";
+     document.getElementById("distance_pinky").innerHTML = "Pinky: " + (100 * stats.PinkyDistance / stats.FingerDistance).toFixed(2) + "%% of total";
 
-      document.getElementById("finger_speed").innerHTML = "Finger Speed: " + (stats.TrueDistance / stats.Time).toFixed(4)
+     document.getElementById("finger_speed").innerHTML = "Finger Speed: " + (stats.TrueDistance / stats.Time).toFixed(4)
 
 
-      document.getElementById("score").innerHTML = "Score: " + Math.round(stats.Score)
+     document.getElementById("score").innerHTML = "Score: " + Math.round(stats.Score)
 
-      var keys = stats.Layout;
-      console.log(keys);
-      document.getElementById("keys").innerHTML = keys[0].join(" ") + "<br>" + keys[1].join(" ") + "<br>" + keys[2].join(" ");
-      if (currentLayout == "optimal") {
-	  document.getElementById("start_generation_button").style.display = "block"
-	  document.getElementById("temp").style.display = "block"
-	  var request = new XMLHttpRequest();
-	  request.onreadystatechange = function() {
-	      if (this.readyState == 4 && this.status == 200) {
-		  temp = this.responseText;
-		  document.getElementById("temp").innerHTML = "Temperature: " + temp
-		  setTimeout(getLayoutStats, 500)
-	      }
-	  };
-	  request.open("GET", "temp", true)
-	  request.send();
-      } else {
-	  document.getElementById("start_generation_button").style.display = "none"
-	  document.getElementById("temp").style.display = "none"
-      }
-  }
+     var keys = stats.Layout;
+     console.log(keys);
+     document.getElementById("keys").innerHTML = keys[0].join(" ") + "<br>" + keys[1].join(" ") + "<br>" + keys[2].join(" ");
+     if (currentLayout == "optimal") {
+	 document.getElementById("start_generation_button").style.display = "block"
+	 document.getElementById("temp").style.display = "block"
+	 var request = new XMLHttpRequest();
+	 request.onreadystatechange = function() {
+	     if (this.readyState == 4 && this.status == 200) {
+		 temp = this.responseText;
+		 document.getElementById("temp").innerHTML = "Temperature: " + temp
+		 setTimeout(getLayoutStats, 500)
+	     }
+	 };
+	 request.open("GET", "temp", true)
+	 request.send();
+     } else {
+	 document.getElementById("start_generation_button").style.display = "none"
+	 document.getElementById("temp").style.display = "none"
+     }
+ }
 </script>

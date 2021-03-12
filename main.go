@@ -11,6 +11,7 @@ func main() {
 			break
 		}
 	}
-	fmt.Println(Data[0:50])
+
+	fmt.Println(Data[0:5])
 	webServer()
 }

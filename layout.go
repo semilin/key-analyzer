@@ -35,6 +35,13 @@ type SFB struct {
 // PositionForKey takes in a character as an input, then returns what
 // column and row that key is found in on the layout.
 func (l *Layout) PositionForKey(char string) (int, int, error) {
+	if char == "?" {
+		char = "/"
+	} else if char == "\"" {
+		char = "'"
+	} else if char == ":" {
+		char = ";"
+	}
 	for y, row := range l.Keys {
 		for x, key := range row {
 			if key == char {
