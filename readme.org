@@ -1,0 +1,29 @@
+#+TITLE:Key Analyzer
+#+AUTHOR:Colin Hughes
+
+* About
+Key Analyzer is a basic program that analyzes keyboard layouts and gives statistics for them. It also has the ability to score layouts and use simulated annealing to generate what should be the best layout according to the scoring algorithm. It creates a web server interface to view the data.
+* Ideals
++ No scoring heatmaps! I believe that these are crutches for layout analysis that are far too opinionated to be useful.
++ Get objective data first, then score based off of the statistics. Having contextual scoring, as in dynamically scoring while reading the text, can provide very advanced score calculation. However, it also makes it very hard to figure out *why* a layout scores the way it does. Objective statistics help us determine exactly how the score came to be.
++ Be configurable - allow the user to provide custom texts, layouts, etc..
+
+* Install
+** From Source
+First, ensure that you have the Go programming language installed.
+#+begin_src sh
+    git clone https://github.com/semilin/key-analyzer
+    cd key-analyzer
+    go build
+#+end_src
+Now you can run the program through the =key-analyzer= binary.
+** Pre-built Releases
+These will be added at some point soon.
+** Web version
+This will be added at some point... probably.
+* Usage
+Run the binary. Now you can go to your web browser and to the URL =localhost:8081=. There, you can get statistics for each layout.
+** Adding text sources
+Add any text file of your choice to the =texts= folder. Once you reload the program, every text in that directory will be used for analysis.
+** Adding layouts
+This is only partially implemented at the moment. The next version should allow this process to be completely automated.
