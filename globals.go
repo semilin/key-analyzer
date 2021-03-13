@@ -7,6 +7,7 @@ var (
 	TextLength float64
 	Generating bool
 	Temp int
+	Layouts map[string]Layout
 	Page string
 )
 

@@ -34,7 +34,7 @@ func response(w http.ResponseWriter, r *http.Request) {
 		go generateOptimal()
 	} else if len(r.URL.Path[1:]) > 0 {
 		fmt.Println(r.URL.Path)
-		layout := strToLayout(string(r.URL.Path[1:]))
+		layout := Layouts[r.URL.Path[1:]]
 		stats := layout.DataStats()
 		stats.Score = score(stats)
 		json, err := json.Marshal(stats)

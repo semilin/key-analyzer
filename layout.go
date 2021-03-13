@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"strings"
 )
 
 type Layout struct {
-	Keys [3][]string
+	Keys [][]string
 	Name string
 }
 
@@ -13,7 +15,7 @@ type Stats struct {
 	TopSFBS            []SFB
 	RowDistribution    []int
 	FingerDistribution [8]int
-	Layout             [3][]string
+	Layout             [][]string
 	SFBamount          int
 	AlternationAmount  int
 	FingerDistance     int
@@ -32,6 +34,33 @@ type SFB struct {
 	Count  int
 }
 
+func LoadLayouts() {
+	files, err := ioutil.ReadDir("./layouts/")
+	if err != nil {
+		panic(err)
+	}
+
+	layoutmap := make(map[string]Layout)
+	
+	for _, f := range files {
+		bytes, err := ioutil.ReadFile("./layouts/" + f.Name())
+		if err != nil {
+			panic(err)
+		}
+		s := string(bytes)
+		var l Layout
+		lines := strings.Split(s, "\n")
+		l.Name = lines[0]
+		for i:=1;i<len(lines);i++ {
+			l.Keys = append(l.Keys, strings.Split(lines[i], " "))
+		}
+
+		layoutmap[f.Name()] = l
+	}
+
+	Layouts = layoutmap
+}
+
 // PositionForKey takes in a character as an input, then returns what
 // column and row that key is found in on the layout.
 func (l *Layout) PositionForKey(char string) (int, int, error) {
@@ -41,7 +70,7 @@ func (l *Layout) PositionForKey(char string) (int, int, error) {
 		char = "'"
 	} else if char == ":" {
 		char = ";"
-	}
+	} 
 	for y, row := range l.Keys {
 		for x, key := range row {
 			if key == char {
