@@ -1,0 +1,14 @@
+#+TITLE:Todo List
+* DONE Layouts stored on hard drive
+CLOSED: [2021-03-14 Fri 5:00]
+* TODO [#A] Make the frontend layout list dynamic
+Currently the list of layouts is hard coded into the html. This would make the program much more user friendly. Without this change, the layouts being stored in the hard drive is hardly even that helpful.
+* TODO Fix top SFB list
+This is a super easy change to make. I know exactly how to do it.
+* TODO Make score weighting configurable
+This should at least be available through a file, but ideally in the interface itself.
+* TODO Make an option to save a generated layout to the layouts folder
+* TODO Add thumbkey support
+* TODO Add chording/combo support
+* TODO Display heatmap in frontend
+* TODO Display finger usage in frontend
