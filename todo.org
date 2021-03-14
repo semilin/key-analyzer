@@ -1,4 +1,5 @@
 #+TITLE:Todo List
+This file is designed for Emacs. It does not look good on Github, or even show all the information that is there. Don't view it on Github.
 * DONE Layouts stored on hard drive
 CLOSED: [2021-03-14 Fri 5:00]
 * TODO [#A] Make the frontend layout list dynamic
