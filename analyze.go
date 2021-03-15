@@ -6,7 +6,7 @@ import (
 )
 
 type Word struct {
-	Word string
+	Word  string
 	Count int
 }
 
@@ -15,6 +15,7 @@ type Pos struct {
 	Col int
 }
 
+// TextData walks through the texts and gets a sorted list of words paired with how many times they occurred.
 func TextData() []Word {
 	var words []Word
 	for _, t := range Texts {
@@ -25,7 +26,7 @@ func TextData() []Word {
 			added := false
 			w = strings.ToLower(w)
 			for j, word := range words {
-				
+
 				if word.Word == w {
 					added = true
 					words[j].Count++
@@ -42,7 +43,7 @@ func TextData() []Word {
 							break
 						}
 					}
-					 
+
 					break
 				}
 			}
@@ -50,23 +51,24 @@ func TextData() []Word {
 				words = append(words, Word{w, 1})
 			}
 		}
-		
+
 	}
 
 	return words
 }
 
+// DataStats returns statistics based off of the text data created. It should be faster than the old statistics method, but this is not benchmarked.
 func (l *Layout) DataStats() Stats {
 	var stats Stats
 	stats.FingerDistribution = [8]int{0, 0, 0, 0, 0, 0, 0, 0}
 	stats.RowDistribution = []int{0, 0, 0}
 
 	stats.HeatMap = [3][]int{
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	}
-	
+
 	for _, word := range Data {
 		var alternation int
 		var sfbCount int
@@ -76,15 +78,15 @@ func (l *Layout) DataStats() Stats {
 		var pinkydistance int
 		var redirections int
 		heatmap := [][]int{
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		}
 		fingerdistribution := [8]int{0, 0, 0, 0, 0, 0, 0, 0}
 		rowdistribution := []int{0, 0, 0}
 
 		var lastkeys []Pos
-		
+
 		lastfinger := NoFinger
 		lasthand := NoHand
 		lastlasthand := NoHand
@@ -105,12 +107,15 @@ func (l *Layout) DataStats() Stats {
 			}
 
 			heatmap[row][col] += 1
-			
+
+			// Determine which finger was used based off of the column.
+			// 1-4: Left hand  [pinky, ring, middle, index]
+			// 5-9: Right hand [index, middle, ring, pinky]
 			switch {
 			case col <= 3:
-				finger = col+1
+				finger = col + 1
 			case col >= 6:
-				finger = col-1
+				finger = col - 1
 			case col == 4:
 				finger = 4
 				distance++
@@ -119,11 +124,12 @@ func (l *Layout) DataStats() Stats {
 				distance++
 			}
 
-			
-			for t:=len(lastkeys)-1;t>0;t-- {
+			// Iterate through last keys pressed to see if
+			// there are any disjointed SFBs
+			for t := len(lastkeys) - 1; t > 0; t-- {
 				pos := lastkeys[t]
 				var oldfinger int
-				
+
 				if pos.Col <= 3 {
 					oldfinger = pos.Col + 1
 				} else if pos.Col >= 6 {
@@ -132,6 +138,7 @@ func (l *Layout) DataStats() Stats {
 					oldfinger = pos.Col
 				}
 
+				// Disjointed SFB is found
 				if oldfinger == finger {
 					if len(lastkeys)-1 == t {
 						time += 0.5
@@ -143,13 +150,13 @@ func (l *Layout) DataStats() Stats {
 							time += 3
 						}
 					}
-					
-				
-					truedistance += math.Abs(float64(pos.Col - col)) + math.Abs(float64(pos.Row - row))
+
+					truedistance += math.Abs(float64(pos.Col-col)) + math.Abs(float64(pos.Row-row))
 					break
 				}
 			}
-			
+
+			// If the key is not on the homerow, add distance
 			if row != 1 {
 				distance++
 				if finger == 1 || finger == 8 {
@@ -162,16 +169,19 @@ func (l *Layout) DataStats() Stats {
 
 			rowdistribution[row]++
 
+			// Determines the hand that the key is on
 			if finger <= 4 {
 				hand = LeftHand
 			} else {
 				hand = RightHand
 			}
 
+			// Alternated from last hand
 			if lasthand != hand && lasthand != NoHand {
 				alternation++
 			}
 
+			// Determine direction of the ngram on the hand
 			var direction int
 			if lasthand == hand {
 				if finger < lastfinger {
@@ -185,17 +195,20 @@ func (l *Layout) DataStats() Stats {
 				direction = NoDirection
 			}
 
+			// If the current trigram is all on the same hand
 			if lastlasthand == lasthand && hand == lasthand {
+				// If the ngram direction changed
 				if direction != lastdirection && lastdirection != NoDirection && direction != NoDirection {
 					redirections++
 				}
 			}
 
+			// SFB
 			if finger == lastfinger && lastchar != char && lastfinger != NoFinger {
 				sfbCount++
 			}
 
-			fingerdistribution[finger-1]++
+			fingerdistribution[finger-1]++ // Adjusts by -1 to correctly index in array
 
 			lastlasthand = lasthand
 			lasthand = hand
@@ -205,9 +218,9 @@ func (l *Layout) DataStats() Stats {
 			lastchar = char
 			lastkeys = append(lastkeys, Pos{row, col})
 		}
-		stats.AlternationAmount += alternation * word.Count 
-		stats.SFBamount += sfbCount * word.Count 
-		stats.FingerDistance += distance * word.Count 
+		stats.AlternationAmount += alternation * word.Count
+		stats.SFBamount += sfbCount * word.Count
+		stats.FingerDistance += distance * word.Count
 		stats.PinkyDistance += pinkydistance * word.Count
 		stats.TextLength += (len(word.Word)) * word.Count
 		stats.Redirections += redirections * word.Count
@@ -220,7 +233,7 @@ func (l *Layout) DataStats() Stats {
 				stats.HeatMap[y][x] += key * word.Count
 			}
 		}
-		
+
 		for i, v := range rowdistribution {
 			stats.RowDistribution[i] += v * word.Count
 		}
@@ -238,7 +251,7 @@ func (l *Layout) Stats() Stats {
 	var stats Stats
 	stats.FingerDistribution = [8]int{0, 0, 0, 0, 0, 0, 0, 0}
 	stats.RowDistribution = []int{0, 0, 0}
-	
+
 	var lasthand int = NoHand
 	var lastfinger int = NoFinger
 	//var lastrow int = NoRow
@@ -255,12 +268,12 @@ func (l *Layout) Stats() Stats {
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	}*/
 	var outwardrolls int
-	
+
 	for _, char := range strings.Split(FullText, "") {
 		var hand int
 		var finger int
 		var row int
-		
+
 		if char == " " {
 			lasthand = NoHand
 			lastfinger = NoFinger
@@ -289,7 +302,7 @@ func (l *Layout) Stats() Stats {
 				finger = 4
 				if char != lastchar {
 					distance++
-				} 
+				}
 			} else {
 				finger = col + 1
 			}
@@ -305,14 +318,14 @@ func (l *Layout) Stats() Stats {
 			}
 		}
 
-		stats.FingerDistribution[finger-1]++ 
+		stats.FingerDistribution[finger-1]++
 
 		// alternation
 		if lasthand != NoHand && lasthand != hand {
 			alternation++
 		} else {
 			// outward rolls
-			
+
 			if hand == LeftHand {
 				if finger < lastfinger {
 					outwardrolls++
@@ -340,7 +353,7 @@ func (l *Layout) Stats() Stats {
 			}
 		}
 		if !added {
-			sfbs = append(sfbs, SFB{lastchar+char, 1})
+			sfbs = append(sfbs, SFB{lastchar + char, 1})
 		}
 
 		// row 1 is homerow

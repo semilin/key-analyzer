@@ -5,6 +5,7 @@ import (
 	"math/rand"
 )
 
+// score returns a number that represents how "good" a layout is based off of arbitrary weighting.
 func score(stats Stats) float64 {
 	var score float64
 	//score += 1000 * (100 * float64(stats.SFBamount) / TextLength)
@@ -12,17 +13,17 @@ func score(stats Stats) float64 {
 	//score += float64(fingerspeed)
 
 	//alternationpercent := 100*(float64(stats.AlternationAmount) / TextLength)
-	
+
 	//if alternationpercent >= 35 {
 	//	score += alternationpercent
 	//}
-	
+
 	score += 10 * (100 * float64(stats.TrueDistance) / TextLength * 5)
 	score += 10 * (100 * float64(stats.FingerDistance) / TextLength * 5)
-	
+
 	//fingerlengths := [4]int{3, 6, 8, 3}
 	score += 1 * (100 * float64(stats.Redirections) / TextLength)
-	
+
 	idealfingers := [4]float64{12, 12, 13, 13}
 	var usageoff float64
 
@@ -37,7 +38,7 @@ func score(stats Stats) float64 {
 	usageoff += math.Abs(idealfingers[3] - (100 * float64(stats.FingerDistribution[4]) / TextLength))
 
 	score += 1 * usageoff
-	
+
 	score += 2 * (100 * float64(stats.PinkyDistance) / TextLength)
 
 	return score
@@ -46,11 +47,11 @@ func score(stats Stats) float64 {
 func generateOptimal() {
 
 	optimal := Layouts["optimal"]
-	
+
 	Generating = true
-	
-	for Temp=100;Temp>-10;Temp-- {
-		for i:=0;i<(140-Temp);i++ {
+
+	for Temp = 100; Temp > -10; Temp-- {
+		for i := 0; i < (140 - Temp); i++ {
 			x1 := rand.Intn(10)
 			x2 := rand.Intn(10)
 			y1 := rand.Intn(3)
@@ -61,7 +62,7 @@ func generateOptimal() {
 			if second < first {
 				// accept
 				continue
-							
+
 			} else {
 				if Temp > 0 && 1+rand.Intn(100) < Temp {
 					continue
@@ -69,10 +70,10 @@ func generateOptimal() {
 					// reject
 					optimal.swapKeys(x1, y1, x2, y2)
 				}
-				
-			} 
+
+			}
 		}
-		
+
 	}
 
 	Generating = false

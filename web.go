@@ -9,6 +9,7 @@ import (
 	"strconv"
 )
 
+// LoadPage returns the index file
 func LoadPage() {
 	b, _ := ioutil.ReadFile("./web/index.html")
 	Page = string(b)
@@ -25,10 +26,10 @@ func response(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if r.URL.Path[1:] == "style.css" {
 		fmt.Fprintf(w, style())
-		
+
 	} else if r.URL.Path[1:] == "temp" {
 		fmt.Fprintf(w, strconv.Itoa(Temp))
-		
+
 	} else if r.URL.Path[1:] == "start_generation" {
 		fmt.Println("Start generation")
 		go generateOptimal()

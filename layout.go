@@ -11,6 +11,7 @@ type Layout struct {
 	Name string
 }
 
+// Stats contains relevant data for a layout
 type Stats struct {
 	TopSFBS            []SFB
 	RowDistribution    []int
@@ -34,6 +35,7 @@ type SFB struct {
 	Count  int
 }
 
+// LoadLayouts reads all layouts from the directory into the global Layouts variable.
 func LoadLayouts() {
 	files, err := ioutil.ReadDir("./layouts/")
 	if err != nil {
@@ -41,7 +43,7 @@ func LoadLayouts() {
 	}
 
 	layoutmap := make(map[string]Layout)
-	
+
 	for _, f := range files {
 		bytes, err := ioutil.ReadFile("./layouts/" + f.Name())
 		if err != nil {
@@ -51,7 +53,7 @@ func LoadLayouts() {
 		var l Layout
 		lines := strings.Split(s, "\n")
 		l.Name = lines[0]
-		for i:=1;i<len(lines);i++ {
+		for i := 1; i < len(lines); i++ {
 			l.Keys = append(l.Keys, strings.Split(lines[i], " "))
 		}
 
@@ -70,7 +72,7 @@ func (l *Layout) PositionForKey(char string) (int, int, error) {
 		char = "'"
 	} else if char == ":" {
 		char = ";"
-	} 
+	}
 	for y, row := range l.Keys {
 		for x, key := range row {
 			if key == char {
