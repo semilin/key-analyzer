@@ -5,16 +5,7 @@
 <body>
     <div class="dropdown">
 	<button class="dropbtn" id="layout_picker">Choose Layout</button>
-	<div class="dropdown-content">
-	    <a href="javascript:setLayout('qwerty')">Qwerty</a>
-	    <a href="javascript:setLayout('dvorak')">Dvorak</a>
-	    <a href="javascript:setLayout('colemak')">Colemak</a>
-	    <a href="javascript:setLayout('colemak_dh')">Colemak DH</a>
-	    <a href="javascript:setLayout('workman')">Workman</a>
-	    <a href="javascript:setLayout('norman')">Norman</a>
-	    <a href="javascript:setLayout('halmak')">Halmak</a>
-	    <a href="javascript:setLayout('isrt')">ISRT</a>
-	    <a href="javascript:setLayout('optimal')">Optimal</a>
+	<div class="dropdown-content" id="layout_list">
 	</div>
     </div>
     
@@ -67,10 +58,36 @@
 </body>
 
 <script>
+ var layouts
  var stats
  var currentLayout = "qwerty"
 
+ getLayouts()
+ setLayout("qwerty")
  getLayoutStats()
+
+ function getLayouts() {
+     console.log("Getting layouts...")
+     var request = new XMLHttpRequest();
+     request.onreadystatechange = function() {
+	 if (this.readyState == 4 && this.status == 200) {
+	     layouts = JSON.parse(request.responseText);
+	     console.log("received layouts");
+
+	     var names = Object.keys(layouts);
+	     var s = ""
+	     for (var i = 0; i < names.length; i++) {
+		 var l = layouts[i];
+		 s = s + `<a href=\"javascript:setLayout('${names[i]}')\">${layouts[names[i]].Name}</a>\n`
+	     }
+	     document.getElementById('layout_list').innerHTML = s
+	     console.log(s)
+	 }
+     };
+     request.open("GET", "layouts", true)
+     request.send()
+     
+ }
  
  function getLayoutStats() {
      document.getElementById("layouts")
@@ -94,7 +111,6 @@
  }
 
  function setLayout(layout) {
-     console.log(document.getElementById("layout_name".value))
      document.getElementById("layout_name").innerHTML = layout
      getLayoutStats()
  }
