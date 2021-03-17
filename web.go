@@ -33,6 +33,14 @@ func response(w http.ResponseWriter, r *http.Request) {
 	} else if r.URL.Path[1:] == "start_generation" {
 		fmt.Println("Start generation")
 		go generateOptimal()
+	} else if r.URL.Path[1:] == "layouts" {
+		fmt.Println("Getting layouts")
+		LoadLayouts()
+		j, err := json.Marshal(Layouts)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Fprintf(w, string(j))
 	} else if len(r.URL.Path[1:]) > 0 {
 		fmt.Println(r.URL.Path)
 		layout := Layouts[r.URL.Path[1:]]
