@@ -8,7 +8,7 @@ import (
 // score returns a number that represents how "good" a layout is based off of arbitrary weighting.
 func score(stats Stats) float64 {
 	var score float64
-	//score += 1000 * (100 * float64(stats.SFBamount) / TextLength)
+	score += 1000 * (100 * float64(stats.SFBamount) / TextLength)
 	//fingerspeed := 150 * stats.TrueDistance / stats.Time
 	//score += float64(fingerspeed)
 
@@ -39,7 +39,7 @@ func score(stats Stats) float64 {
 
 	score += 1 * usageoff
 
-	score += 2 * (100 * float64(stats.PinkyDistance) / TextLength)
+	score += 4 * (100 * float64(stats.PinkyDistance) / TextLength)
 
 	return score
 }
