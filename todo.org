@@ -2,8 +2,10 @@
 This file is designed for Emacs. It does not look good on Github, or even show all the information that is there. Don't view it on Github.
 * DONE Layouts stored on hard drive
 CLOSED: [2021-03-14 Fri 5:00]
-* TODO [#A] Make the frontend layout list dynamic
+* DONE [#A] Make the frontend layout list dynamic
+CLOSED: [2021-03-17 Wed 11:55]
 Currently the list of layouts is hard coded into the html. This would make the program much more user friendly. Without this change, the layouts being stored in the hard drive is hardly even that helpful.
+* TODO Make frontend look decent
 * TODO Fix top SFB list
 This is a super easy change to make. I know exactly how to do it.
 * TODO Make score weighting configurable
