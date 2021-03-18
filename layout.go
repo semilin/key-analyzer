@@ -56,7 +56,18 @@ func LoadLayouts() {
 			l.Keys = append(l.Keys, strings.Split(lines[i], " "))
 		}
 
-		layoutmap[f.Name()] = l
+		if f.Name() != "optimal" {
+			layoutmap[f.Name()] = l
+		} else {
+			optimal, exists := Layouts["optimal"]
+			fmt.Println(exists)
+			if !exists {
+				layoutmap[f.Name()] = l
+			} else {
+				layoutmap["optimal"] = optimal
+			}
+		}
+
 	}
 
 	Layouts = layoutmap
