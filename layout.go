@@ -16,7 +16,6 @@ type Stats struct {
 	TopSFBS            []SFB
 	RowDistribution    []int
 	FingerDistribution [8]int
-	Layout             [][]string
 	SFBamount          int
 	AlternationAmount  int
 	FingerDistance     int

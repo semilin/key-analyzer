@@ -130,7 +130,7 @@
 
      document.getElementById("score").innerHTML = "Score: " + Math.round(stats.Score)
 
-     var keys = stats.Layout;
+     var keys = layouts[currentLayout].Keys;
      console.log(keys);
      document.getElementById("keys").innerHTML = keys[0].join(" ") + "<br>" + keys[1].join(" ") + "<br>" + keys[2].join(" ");
      if (currentLayout == "optimal") {

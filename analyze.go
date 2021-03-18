@@ -242,7 +242,6 @@ func (l *Layout) DataStats() Stats {
 		}
 	}
 
-	stats.Layout = l.Keys
 	return stats
 }
 
@@ -379,7 +378,6 @@ func (l *Layout) Stats() Stats {
 	stats.OutwardRolls = outwardrolls
 	stats.TextLength = int(TextLength)
 	//stats.HeatMap = heatmap
-	stats.Layout = l.Keys
 
 	return stats
 }
