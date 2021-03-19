@@ -77,6 +77,9 @@
 	     var names = Object.keys(layouts);
 	     var s = ""
 	     for (var i = 0; i < names.length; i++) {
+		 if (names[i] == "_restrict") {
+		     continue
+		 }
 		 var l = layouts[i];
 		 s = s + `<a href=\"javascript:setLayout('${names[i]}')\">${layouts[names[i]].Name}</a>\n`
 	     }
@@ -118,12 +121,12 @@
  function loadStats() {
      document.getElementById("alternation").innerHTML = "Alternation: " + Math.round(100 * stats.AlternationAmount / stats.TextLength) + "%%";
      document.getElementById("redirections").innerHTML = "Redirections: " + Math.round(100 * stats.Redirections / stats.TextLength) + "%%";
-     document.getElementById("sfb_percent").innerHTML = (100 * stats.SFBamount / stats.TextLength).toFixed(1) + "%%";
+     document.getElementById("sfb_percent").innerHTML = (100 * stats.SFBamount / stats.TextLength).toFixed(2) + "%%";
      document.getElementById("top_row").innerHTML = "Top: " + Math.round(100 * stats.RowDistribution[0] / stats.TextLength) + "%%";
      document.getElementById("home_row").innerHTML = "Home: " + Math.round(100 * stats.RowDistribution[1] / stats.TextLength) + "%%";
      document.getElementById("bot_row").innerHTML = "Bot: " + Math.round(100 * stats.RowDistribution[2] / stats.TextLength) + "%%";
      document.getElementById("distance_total").innerHTML = "Total: " + (stats.FingerDistance / stats.TextLength * 5).toFixed(2) + " keys per word";
-     document.getElementById("distance_pinky").innerHTML = "Pinky: " + (100 * stats.PinkyDistance / stats.FingerDistance).toFixed(2) + "%% of total";
+     document.getElementById("distance_pinky").innerHTML = "Pinky: " + (stats.PinkyDistance / stats.TextLength * 5).toFixed(3) + " keys per word";
 
      document.getElementById("finger_speed").innerHTML = "Finger Speed: " + (stats.TrueDistance / stats.Time).toFixed(4)
 

@@ -9,6 +9,7 @@ CLOSED: [2021-03-17 Wed 11:55]
 CLOSED: [2021-03-17 Wed 08:30]
 >>>>>>> 3d9011084e0edb2a350c468e2e5ad0cd8f30962b
 Currently the list of layouts is hard coded into the html. This would make the program much more user friendly. Without this change, the layouts being stored in the hard drive is hardly even that helpful.
+* TODO Add swap restriction support
 * TODO Make frontend look decent
 * TODO Fix top SFB list
 This is a super easy change to make. I know exactly how to do it.

@@ -53,7 +53,10 @@ func LoadLayouts() {
 		lines := strings.Split(s, "\n")
 		l.Name = lines[0]
 		for i := 1; i < len(lines); i++ {
-			l.Keys = append(l.Keys, strings.Split(lines[i], " "))
+			line := strings.TrimSpace(lines[i])
+			if line != "" {
+				l.Keys = append(l.Keys, strings.Split(line, " "))
+			}
 		}
 
 		if f.Name() != "optimal" {
